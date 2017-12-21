@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"    
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"    
+    xmlns:p="http://www.springframework.org/schema/p"    
+    xmlns:context="http://www.springframework.org/schema/context"    
+    xsi:schemaLocation="http://www.springframework.org/schema/beans    
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd    
+http://www.springframework.org/schema/context    
+http://www.springframework.org/schema/context/spring-context-3.0.xsd">    
+
+<context:component-scan base-package="com.javatpoint.controllers"></context:component-scan>  
+
+ <!-- Klíčová beana pro zobrazení šablony -->   
+<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">  
+	<property name="prefix" value="/WEB-INF/jsp/"></property>  
+	<property name="suffix" value=".jsp"></property>  
+</bean>  
+ 
+  <!-- Klíčová beana pro driver do DB -->  
+<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">  
+	<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"></property>  
+	<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"></property>  
+	<property name="username" value="SYSTEM"></property>  
+	<property name="password" value="optimista1"></property>  
+</bean>  
+
+ <bean id="jt" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">   
+      <!--  Musím použít <constructor.arg....>-->  
+         <constructor-arg ref="dataSource"></constructor-arg> 
+ </bean>
+
+
+ <!-- Diky teto beane se muze injektovat do EmpDao.java pomocí @Autowired. Musím použít <constructor.arg....>   --> 
+<bean id="dao" class="com.javatpoint.daoImpl.EmpDaoImpl">  
+	<constructor-arg ref="jt"></constructor-arg>   
+</bean>  
+
+</beans>    
